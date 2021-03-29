@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 // 状态码
-#define TURE 1
+#define TRUE 1
 #define FALSE 0
 #define OK 1
 #define ERROR 0
