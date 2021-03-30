@@ -27,9 +27,9 @@ Status GetELem(LinkList L, int i, ElemType &e); //获取链表第i个元素
 
 int LocateElem(LinkList L, ElemType e, Status (*compare)(ElemType, ElemType));  //返回链表中首个与e满足compare()关系的元素位序
 
-Status PriorElem(LinkList L, ElemType cur_e, ElemType pre_e);   //获取cur_e元素前驱
+Status PriorElem(LinkList L, ElemType cur_e, ElemType &pre_e);   //获取cur_e元素前驱
 
-Status NextElem(LinkList L, ElemType cur_e, ElemType next_e);   //获取cur_e元素后继
+Status NextElem(LinkList L, ElemType cur_e, ElemType &next_e);   //获取cur_e元素后继
 
 Status ListInsert(LinkList &L, int i, ElemType e);      //向链表第i个位置前插入e
 

@@ -186,7 +186,7 @@ Status CreateList_H(LinkList &L, int n)
     return OK;
 }
 
-Status CreateList_T(LinßkList &L, int n)
+Status CreateList_T(LinkList &L, int n)
 { //尾插法建立链表
     L = (LinkList)malloc(sizeof(LNode));
     if (!L)
