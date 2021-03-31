@@ -108,70 +108,104 @@ int LocateElem(SLinkList space, int S, ElemType e, Status (*compare)(ElemType, E
         return 0;
     return i;
 }
-Status PriorElem(SLinkList space, int S, ElemType cur_e, ElemType &pre_e)     //获取cur_e元素前驱
+Status PriorElem(SLinkList space, int S, ElemType cur_e, ElemType &pre_e) //获取cur_e元素前驱
 {
-    if(!S || !space[S].cur) return ERROR;//确保链表存在且不为空
-    
+    if (!S || !space[S].cur)
+        return ERROR; //确保链表存在且不为空
+
     int pre = space[S].cur;
-    if(space[pre].data == cur_e) return ERROR;//第一个元素没有前驱
+    if (space[pre].data == cur_e)
+        return ERROR; //第一个元素没有前驱
     int next = space[pre].cur;
-    while(next && space[next].data != cur_e){
+    while (next && space[next].data != cur_e)
+    {
         pre = next;
         next = space[next].cur;
     }
-    if(!next) return ERROR;
+    if (!next)
+        return ERROR;
     pre_e = space[pre].data;
     return OK;
 }
-    Status NextElem(SLinkList space, int S, ElemType cur_e, ElemType &next_e) //获取cur_e元素后继
+Status NextElem(SLinkList space, int S, ElemType cur_e, ElemType &next_e) //获取cur_e元素后继
+{
+    if (!S || !space[S].cur)
+        return ERROR;
+    int p = space[S].cur;
+    int next = space[p].data;
+    while (next && space[p].data != cur_e)
     {
-        if(!S || !space[S].cur) return ERROR;
-        int p = space[S].cur;
-        int next = space[p].data;
-        while(next && space[p].data != cur_e){
-            p = next;
-            next = space[next].cur;
-        }
-        if(!next) return ERROR;
-        next_e = space[next_e].data;
-        return OK;
+        p = next;
+        next = space[next].cur;
     }
+    if (!next)
+        return ERROR;
+    next_e = space[next_e].data;
+    return OK;
+}
 
-    Status ListInsert(SLinkList space, int &S, int i, ElemType e)             //向链表第i个位置前插入e
+Status ListInsert(SLinkList space, int &S, int i, ElemType e) //向链表第i个位置前插入e
+{
+    if (!S)
+        return ERROR;
+    int pre = S;
+    for (int j = 1; j < i && pre; j++)
+        pre = space[pre].cur;
+    if (!pre)
+        return ERROR;
+    int s = Malloc(space);
+    space[s].cur = space[pre].cur;
+    space[pre].cur = s;
+    space[s].data = e;
+    return OK;
+}
+
+Status ListDelete(SLinkList space, int &S, int i, ElemType &e) //删除链表第i个元素，并将删除元素存储到e中{
+{
+    if (!S || !space[S].cur)
+        return ERROR;
+    int pre = S, p = space[S].cur;
+    for (int j = 1; j < i && p; j++)
     {
-        if(!S) return ERROR;
-        int pre = S;
-        for(int j = 1; j < i && pre; j++) pre = space[pre].cur;
-        if(!pre) return ERROR;
-        int s = Malloc(space);
-        space[s].cur = space[pre].cur;
-        space[pre].cur = s;
-        space[s].data = e;
-        return OK;
+        pre = p;
+        p = space[p].cur;
     }
+    if (!p)
+        return ERROR;
+    e = space[p].data;
+    space[pre].cur = space[p].cur;
+    Free(space, p);
+    return OK;
+}
 
-    Status ListDelete(SLinkList space, int &S, int i, ElemType &e)            //删除链表第i个元素，并将删除元素存储到e中{
-    {
-        if(!S || !space[S].cur) return ERROR;
-        int pre = S, p = space[S].cur;
-        for(int j = 1; j < i && p; j++){
-            pre = p;
-            p = space[p].cur;
-        }
-        if(!p)return ERROR;
-        e = space[p].data;
-        space[pre].cur = space[p].cur;
-        Free(space, p);
-        return OK;
-    }
-
-    void ListTraverse(SLinkList space, int &S, void(Visit)(ElemType))         //用visit()遍历整个链表
-    {
-        if(!S || !space[S].cur) return;
-        int p = space[S].cur;
-        while(p){
-            Visit(space[p].data);
-            p = space[p].cur;                
-        }
+void ListTraverse(SLinkList space, int &S, void(Visit)(ElemType)) //用visit()遍历整个链表
+{
+    if (!S || !space[S].cur)
         return;
+    int p = space[S].cur;
+    while (p)
+    {
+        Visit(space[p].data);
+        p = space[p].cur;
     }
+    return;
+}
+
+Status CreatListH(SLinkList space, int &S, int len) //头插法建立链表
+{
+    if (!InitList(space, S))
+        return ERROR; //如果初始化失败，返回ERROR；
+
+    for (int i = 0; i < len; i++) //插入len个结点
+    {
+        int s = Malloc(space); //申请结点空间
+        if (!s)
+            return ERROR; //申请失败，返回ERROR
+
+        scanf("%d", &space[s].data); //输入结点数据
+
+        space[s].cur = space[S].cur; //头插法插入结点s
+        space[S].cur = s;
+    }
+    return OK;
+}
