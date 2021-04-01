@@ -15,4 +15,4 @@ Status difference(SLinkList &space, int &S); //依次输入集合A和集合B的�
 
 Status equal(ElemType e1, ElemType e2); //判断e1和e2是否相等，如果相等返回OK，否则返回ERROR
 
-#endif
+#endifr
