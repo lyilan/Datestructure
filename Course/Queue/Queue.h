@@ -30,7 +30,7 @@ Status InitQueue(LinkQueue &Q);
 //构造一个空队列
 Status DestroyQueue(LinkQueue &Q);
 //销毁队列Q，Q不再存在
-Status ClearQueue(LinkQueue $Q);
+Status ClearQueue(LinkQueue &Q);
 //将Q清为空队列
 Status QueueEmpty(LinkQueue Q);
 //若队列Q为空队列，则返回TRUE，否则返回FALSE

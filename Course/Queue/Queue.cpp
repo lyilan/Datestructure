@@ -69,7 +69,7 @@ Status GetHead(LinkQueue Q, QElemType &e)
         return ERROR;
     else
     {
-        e = Q.front->data;
+        e = Q.front->next->data;
         return TRUE;
     }
 }
@@ -111,6 +111,11 @@ Status QueueTraverse(LinkQueue Q, void (*visit)(QElemType))
         Q.front = Q.front->next;
         visit(Q.front->data);
     }
+    printf("\n");
+    return OK;
 }
 
-void visit();
+void visit(QElemType e)
+{
+    printf("%4d", e);
+}
