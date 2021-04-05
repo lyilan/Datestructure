@@ -171,7 +171,7 @@ void PaintMaze(MazeType maze) //打印迷宫
 {
     int i, j;
 
-    system("sleep 1");
+    system("sleep 0.1");
     system("clear");
     for (i = 0; i < M; i++)
     {

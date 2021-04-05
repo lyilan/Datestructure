@@ -15,7 +15,7 @@ int main()
     while (Re == 'Y' || Re == 'y')
     {
         InitMaze(maze, start, end);
-
+        
         MazePath(maze, start, end);
 
         printf("以莹妹之名再玩一遍：（Y/N）");
