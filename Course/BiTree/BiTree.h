@@ -1,0 +1,72 @@
+/*
+ * @Author: lyilan
+ * @Date: 2021-04-06 10:29:13
+ * @Description: for my ying~
+ */
+
+// - - - - - 二叉树的二叉链表存储表示 - - - - -
+#ifndef BITNODE_H
+#define BITNODE_H
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <string.h>
+#include "../../Status/Status.h"
+
+typedef char TElemType;
+typedef struct BiTNode
+{
+    TElemType data;
+    struct BiTNode *lchild, *rchild;
+} BiTNode, *BiTree;
+
+// - - - - - 基本操作函数的原型说明 - - - - -
+Status InitBitree(BiTree &T);
+
+Status DestroyBiTree(BiTree &T);
+
+Status ClearBiTree(BiTree &T);
+
+Status CreateBiTree(BiTree &T, char *path);
+
+Status BiTreeEmpty(BiTree T);
+
+int BiTreeDepth(BiTree T);
+
+TElemType Root(BiTree T);
+
+TElemType Value(BiTree T, TElemType e);
+
+Status Assign(BiTree T, TElemType e, TElemType value);
+
+Status Parent(BiTree T, TElemType e);
+
+Status LeftChild(BiTree T, TElemType e);
+
+Status RightChild(BiTree T, TElemType e);
+
+Status LeftSibling(BiTree T, TElemType e);
+
+Status RightSibling(BiTree T, TElemType e);
+
+Status InsertChild(BiTree T, TElemType p, int LR, BiTree c);
+
+Status DeleteChild(BiTree T, TElemType p, int LR);
+
+Status PreOrderTraverse(BiTree T, Status (*visit)(TElemType));
+
+Status InOrderTraverse(BiTree T, Status (*visit)(TElemType));
+
+Status PostOrderTraverse(BiTree T, Status (*visit)(TElemType));
+
+Status LevelOrderTraverse(BiTree T, Status (*visit)(TElemType));
+
+// - - - - - 仅内部使用的函数 - - - - -
+static void CreateTree(BiTree T, FILE *fp);
+
+static BiTree EPTr(BiTree T, TElemType e);
+
+static BiTree PPTr(BiTree T, TElemType e);
+
+#endif
