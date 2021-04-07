@@ -254,6 +254,7 @@ Status PreOrderTraverse(BiTree T, Status (*Visit)(TElemType))
             }
         }
     }
+    printf("\n");
     return ERROR;
 }
 
@@ -270,6 +271,7 @@ Status InOrderTraverse(BiTree T, Status (*Visit)(TElemType))
             }
         }
     }
+    printf("\n");
     return ERROR;
 }
 
@@ -283,10 +285,41 @@ Status PostOrderTraverse(BiTree T, Status (*Visit)(TElemType))
                 return OK;
         }
     }
+    printf("\n");
     return ERROR;
 }
 
-Status LevelOrderTraverse(BiTree T, Status (*visit)(TElemType));
+Status LevelOrderTraverse(BiTree T, Status (*Visit)(TElemType))
+{
+    LinkQueue Q;
+    BiTree e;
+
+    if (T == NULL)
+    {
+        printf("\n");
+        return ERROR;
+    }
+
+    InitQueue(Q);
+
+    EnQueue(Q, T);
+
+    while (!QueueEmpty(Q))
+    {
+        DeQueue(Q, e);
+
+        if (!Visit(e->data))
+            return ERROR;
+
+        if (e->lchild != NULL)
+            EnQueue(Q, e->lchild);
+
+        if (e->rchild != NULL)
+            EnQueue(Q, e->rchild);
+    }
+    printf("\n");
+    return OK;
+}
 
 // - - - - - 内部使用函数的实现 - - - - -
 static void CreateTree(BiTree T, FILE *fp)
@@ -364,4 +397,79 @@ static BiTree PPTr(BiTree T, TElemType e)
         return pr;
 
     return NULL;
+}
+
+// - - - - - 图形化输出 - - - - -
+void PaintTree(BiTree T)
+{
+    int level, width;
+    int i, j, k, w;
+    int begin;
+    int distance;
+    TElemType **tmp;
+    LinkQueue Q;
+    BiTree e;
+
+    if (BiTreeEmpty(T))
+    {
+        printf("\n");
+        return;
+    }
+
+    level = BiTreeDepth(T);
+    width = (int)pow(2, level) - 1;
+
+    //动态创建行
+    tmp = (TElemType **)malloc(level * sizeof(TElemType *));
+
+    //动态创建列
+    for (i = 0; i < level; i++)
+    {
+        tmp[i] = (TElemType *)malloc(width * sizeof(TElemType));
+        memset(tmp[i], '\0', width);
+    }
+
+    InitQueue(Q);
+    EnQueue(Q, T);
+
+    for (i = 0; i < level; i++)
+    {
+        w = (int)pow(2, level);
+        distance = width / w;
+        begin = width / (int)pow(2, i + 1);
+
+        for (k = 0; k < w; k++)
+        {
+            DeQueue(Q, e);
+            if (e == NULL)
+            {
+                EnQueue(Q, NULL);
+                EnQueue(Q, NULL);
+            }
+            else
+            {
+                j = begin + k * (1 + distance);
+                tmp[i][j] = e->data;
+
+                EnQueue(Q, e->lchild);
+                EnQueue(Q, e->rchild);
+            }
+        }
+    }
+
+    for (i = 0; i < level; i++)
+    {
+        for (j = 0; j < width; j++)
+        {
+            if (tmp[i][j] != '\0')
+            {
+                printf("%c", tmp[i][j]);
+            }
+            else
+            {
+                printf(" ");
+            }
+        }
+        printf("\n");
+    }
 }
