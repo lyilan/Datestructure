@@ -20,8 +20,8 @@ typedef struct QNode
 } QNode, *QueuePtr;
 typedef struct
 {
-    QueuePtr front;
-    QueuePtr rear;
+    QueuePtr front; //队头指针
+    QueuePtr rear;  //队尾指针
 } LinkQueue;
 
 // - - - - - 基本操作的函数原型说明 - - - - -
