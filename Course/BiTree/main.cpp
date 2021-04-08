@@ -12,7 +12,7 @@ int main()
 
     BiTree T;
     if (InitBitree(T))
-        printf("初始化成功！");
+        printf("初始化成功！\n");
 
     if (CreateBiTree(T, "PreT.txt"))
         printf("创建二叉树成功！");

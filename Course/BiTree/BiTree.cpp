@@ -41,7 +41,7 @@ Status CreateBiTree(BiTree &T, char *path)
 {
     FILE *fp;
     int ReadFromConsole; //是否从控制台读取程序
-    ReadFromConsole = path == NULL || strcmp(path, "") == 0;
+    ReadFromConsole = (path == NULL);
     if (ReadFromConsole)
     {
         printf("请输入二叉树的先序序列，如果没有子结点，使用^代替：");
@@ -55,6 +55,7 @@ Status CreateBiTree(BiTree &T, char *path)
         CreateTree(T, fp);
         fclose(fp);
     }
+    return OK;
 }
 
 Status BiTreeEmpty(BiTree T)

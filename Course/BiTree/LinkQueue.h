@@ -12,6 +12,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+struct BiTNode;
+typedef BiTNode *BiTree;
 typedef BiTree QElemType; //队列元素类型定义
 
 typedef struct QNode //队列元素结构定义
