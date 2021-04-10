@@ -1,14 +1,15 @@
 /*
- * @Author: lyilan
- * @Date: 2021-04-06 13:09:02
- * @Description: for my ying~
- */
+* @Author: lyilan
+* @Date: 2021-04-06 13:09:02
+* @Description: for my ying~
+*/
 #include "BiTree.h"
 
 // - - - - - 基本操作函数的实现 - - - - -
 
 Status InitBitree(BiTree &T)
 {
+    //初始化树
     T == NULL;
     return OK;
 }
@@ -60,7 +61,7 @@ Status CreateBiTree(BiTree &T, char *path)
 
 Status BiTreeEmpty(BiTree T)
 {
-    return T == NULL ? TRUE : FALSE;
+    return (T == NULL) ? TRUE : FALSE;
 }
 
 int BiTreeDepth(BiTree T)
@@ -246,17 +247,11 @@ Status PreOrderTraverse(BiTree T, Status (*Visit)(TElemType))
 {
     if (T)
     {
-        if (Visit(T->data))
-        {
-            if (PreOrderTraverse(T->lchild, Visit))
-            {
-                if (PreOrderTraverse(T->rchild, Visit))
-                    return OK;
-            }
-        }
+        Visit(T->data);
+        PreOrderTraverse(T->lchild, Visit);
+        PreOrderTraverse(T->rchild, Visit);
     }
-    printf("\n");
-    return ERROR;
+    return TRUE;
 }
 
 Status InOrderTraverse(BiTree T, Status (*Visit)(TElemType))
@@ -323,7 +318,7 @@ Status LevelOrderTraverse(BiTree T, Status (*Visit)(TElemType))
 }
 
 // - - - - - 内部使用函数的实现 - - - - -
-static void CreateTree(BiTree T, FILE *fp)
+static void CreateTree(BiTree &T, FILE *fp)
 {
     char ch;
 
@@ -401,12 +396,11 @@ static BiTree PPTr(BiTree T, TElemType e)
 }
 
 // - - - - - 图形化输出 - - - - -
-void PaintTree(BiTree T)
+void PaintTree(BiTree &T)
 {
-    int level, width;
-    int i, j, k, w;
-    int begin;
-    int distance;
+    int level, width; //二维数组大小
+    int depth;        //记录树的高度
+    int i, j;
     TElemType **tmp;
     LinkQueue Q;
     BiTree e;
@@ -417,8 +411,9 @@ void PaintTree(BiTree T)
         return;
     }
 
-    level = BiTreeDepth(T);
-    width = (int)pow(2, level) - 1;
+    depth = BiTreeDepth(T);
+    level = (int)pow(2, depth - 1) + depth - 1;
+    width = (int)pow(2, depth) - 1;
 
     //动态创建行
     tmp = (TElemType **)malloc(level * sizeof(TElemType *));
@@ -430,47 +425,46 @@ void PaintTree(BiTree T)
         memset(tmp[i], '\0', width);
     }
 
-    InitQueue(Q);
-    EnQueue(Q, T);
+    //存储要打印树的信息
+    PaintBiTree(tmp, T, 0, width / 2);
 
-    for (i = 0; i < level; i++)
-    {
-        w = (int)pow(2, level);
-        distance = width / w;
-        begin = width / (int)pow(2, i + 1);
-
-        for (k = 0; k < w; k++)
-        {
-            DeQueue(Q, e);
-            if (e == NULL)
-            {
-                EnQueue(Q, NULL);
-                EnQueue(Q, NULL);
-            }
-            else
-            {
-                j = begin + k * (1 + distance);
-                tmp[i][j] = e->data;
-
-                EnQueue(Q, e->lchild);
-                EnQueue(Q, e->rchild);
-            }
-        }
-    }
-
-    for (i = 0; i < level; i++)
+    for (i = 0; i < level; i++) //打印输出结果
     {
         for (j = 0; j < width; j++)
         {
             if (tmp[i][j] != '\0')
-            {
                 printf("%c", tmp[i][j]);
-            }
             else
-            {
                 printf(" ");
-            }
         }
         printf("\n");
     }
+}
+
+void PaintBiTree(TElemType **tmp, BiTree &T, int x, int y)
+{
+    //将二叉树T存储在tmp中，并将根设置在tmp[x][y]
+    int i;
+    if (T == NULL)
+        return;
+    tmp[x][y] = T->data; //存储根的信息
+    int d = BiTreeDepth(T);
+
+    if (T->lchild)
+    {
+        for (i = 1; i <= pow(2, d - 2); i++) //存储根与左子树的连线
+        {
+            tmp[x + i][y - i] = '/';
+        }
+        PaintBiTree(tmp, T->lchild, x + i, y - i + 1); //存储左子树
+    }
+    if (T->rchild)
+    {
+        for (i = 1; i <= pow(2, d - 2); i++) //存储根与右子树的连线
+        {
+            tmp[x + i][y + i] = '\\';
+        }
+        PaintBiTree(tmp, T->rchild, x + i, y + i - 1); //存储右子树
+    }
+    return;
 }

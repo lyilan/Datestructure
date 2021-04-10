@@ -64,13 +64,15 @@ Status PostOrderTraverse(BiTree T, Status (*Visit)(TElemType));
 Status LevelOrderTraverse(BiTree T, Status (*Visit)(TElemType));
 
 // - - - - - 仅内部使用的函数 - - - - -
-static void CreateTree(BiTree T, FILE *fp);
+static void CreateTree(BiTree &T, FILE *fp);
 
 static BiTree EPTr(BiTree T, TElemType e);
 
 static BiTree PPTr(BiTree T, TElemType e);
 
 // - - - - - 图形化输出 - - - - -
-void PaintTree(BiTree T);
+void PaintTree(BiTree &T);
+
+void PaintBiTree(TElemType **tmp, BiTree &T, int x, int y);
 
 #endif
