@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "../../Status/Status.h"
+#include "LinkQueue.h"
 
 //Link == 0:指针，Thread == 1:线索
 typedef enum PointerTag
@@ -38,6 +39,8 @@ Status InorderThreading(BiThrTree &Thrt, BiThrTree T);
 
 // - - - - - 内部函数的声明 - - - - -
 Status CreateTree(BiThrTree &T, FILE *fp);
+
+Status InThreading(BiThrTree p);
 
 // - - - - -图形化输出 - - - - -
 void PaintTree(BiThrTree &T);

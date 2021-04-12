@@ -30,8 +30,52 @@ Status CreateBiThrTree(BiThrTree &T, char *path) //先序建立二叉树
     return OK;
 }
 
+Status InOrderTraverse_Thr(BiThrTree &T, Status (*Visit)(TElemType))
+{
+    BiThrTree p = T->lchild;
+    while (p != T)
+    {
+        while (p->LTag == Link)
+            p = p->lchild;
+        if (!Visit(p->data))
+            return ERROR;
+        while (p->RTag == Thread && p->rchild != T)
+        {
+            p = p->rchild;
+            Visit(p->data);
+        }
+        p = p->rchild;
+    }
+    return OK;
+}
+
+Status InorderThreading(BiThrTree &Thrt, BiThrTree T)
+{
+    if (!(Thrt = (BiThrTree)malloc(sizeof(BiThrNode))))
+        exit(OVERFLOW);
+
+    Thrt->LTag = Link;
+    Thrt->RTag = Thread;
+
+    Thrt->lchild = Thrt;
+    if (!T)
+        Thrt->lchild = Thrt;
+    else
+    {
+        Thrt->lchild = T;
+        pre = Thrt;
+
+        InThreading(T);
+
+        pre->rchild = Thrt;
+        pre->RTag = Thread;
+        Thrt->rchild = pre;
+    }
+    return OK;
+}
+
 // - - - - - 内部函数的实现 - - - - -
-Status CreateTree(BiThrTree &T, FILE *fp)
+static void CreateTree(BiThrTree &T, FILE *fp)
 {
     char ch;
 
@@ -51,6 +95,27 @@ Status CreateTree(BiThrTree &T, FILE *fp)
         T->data = ch;
         CreateTree(T->lchild, fp); //创建左子树
         CreateTree(T->rchild, fp); //创建右子树
+    }
+}
+
+static void InThreading(BiThrTree p)
+{
+    if (p)
+    {
+        InThreading(p->lchild);
+
+        if (!p->lchild)
+        {
+            p->LTag = Thread;
+            p->lchild = pre;
+        }
+        if (!pre->rchild)
+        {
+            pre->RTag = Thread;
+            pre->rchild = p;
+        }
+        pre = p;
+        InThreading(p->rchild);
     }
 }
 
